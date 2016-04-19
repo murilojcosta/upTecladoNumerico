@@ -12,11 +12,15 @@ type
     { protected declarations }
   public
     procedure AbreTecladoNumerico(aEditPreencher: TEdit);
+    destructor Destroy; override;
   published
     { published declarations }
   end;
 
 implementation
+
+uses
+  System.SysUtils;
 
 { TTecladoNumerico }
 
@@ -28,6 +32,13 @@ begin
   FFormTecladoNumerico.EdtPreencher      := TEdit(aEditPreencher);
   FFormTecladoNumerico.lblResultado.Text := aEditPreencher.Text;
   FFormTecladoNumerico.Show;
+end;
+
+destructor TupTecladoNumerico.Destroy;
+begin
+  if not Assigned(FFormTecladoNumerico) then
+    FreeAndNil(FFormTecladoNumerico);
+  inherited;
 end;
 
 end.
