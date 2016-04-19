@@ -60,7 +60,10 @@ implementation
 procedure TFrmTecladoNumerico.AddDigitado(Sender: TObject);
 begin
   imgErro.Visible := False;
-  lblResultado.Text := lblResultado.Text + (Sender as TSpeedButton).Text;
+
+  if not lblResultado.Text.EndsWith('+') and not lblResultado.Text.EndsWith('-')
+  and not lblResultado.Text.EndsWith('*') and not lblResultado.Text.EndsWith('/') then
+    lblResultado.Text := lblResultado.Text + (Sender as TSpeedButton).Text;
 end;
 
 procedure TFrmTecladoNumerico.btnApagarClick(Sender: TObject);
