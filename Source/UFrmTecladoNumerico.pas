@@ -3,7 +3,7 @@ unit UFrmTecladoNumerico;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, System.StrUtils,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects, FMX.Layouts, FMX.StdCtrls, FMX.Controls.Presentation, FMX.Edit,
   FMX.Effects, Math, System.Rtti, System.Bindings.EvalProtocol, System.Bindings.Evaluator, System.Bindings.EvalSys;
 
@@ -61,9 +61,14 @@ procedure TFrmTecladoNumerico.AddDigitado(Sender: TObject);
 begin
   imgErro.Visible := False;
 
-  if not lblResultado.Text.EndsWith('+') and not lblResultado.Text.EndsWith('-')
-  and not lblResultado.Text.EndsWith('*') and not lblResultado.Text.EndsWith('/') then
-    lblResultado.Text := lblResultado.Text + (Sender as TSpeedButton).Text;
+  if (lblResultado.Text.EndsWith('+') or lblResultado.Text.EndsWith('-') or
+      lblResultado.Text.EndsWith('*') or lblResultado.Text.EndsWith('/'))
+  and
+     ( ((Sender as TSpeedButton).Text = '+') or ((Sender as TSpeedButton).Text = '-') or
+       ((Sender as TSpeedButton).Text = '*') or ((Sender as TSpeedButton).Text = '/')) then
+  Exit;
+
+  lblResultado.Text := lblResultado.Text + (Sender as TSpeedButton).Text;
 end;
 
 procedure TFrmTecladoNumerico.btnApagarClick(Sender: TObject);
@@ -100,9 +105,9 @@ begin
     if not lblResultado.Text.IsEmpty then
     begin
       LScope:= BasicOperators;
-      LCompiledExpr:= Compile(lblResultado.Text, LScope);
+      LCompiledExpr:= Compile(ReplaceStr(lblResultado.Text,',','.'), LScope);
       LResult:=LCompiledExpr.Evaluate(LScope, nil, nil).GetValue;
-      lblResultado.Text := LResult.ToString;
+      lblResultado.Text := ReplaceStr(LResult.ToString,'.',',');
     end;
     imgErro.Visible := False;
     Result := True;

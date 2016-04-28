@@ -32,6 +32,8 @@ begin
   FFormTecladoNumerico.EdtPreencher      := TEdit(aEditPreencher);
   FFormTecladoNumerico.lblResultado.Text := aEditPreencher.Text;
   FFormTecladoNumerico.Show;
+
+  FFormTecladoNumerico.SetBounds(TForm(Self.Owner).Top, TForm(Self.Owner).Left, TForm(Self.Owner).Width, TForm(Self.Owner).Height);
 end;
 
 destructor TupTecladoNumerico.Destroy;
